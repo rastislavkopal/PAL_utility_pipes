@@ -12,15 +12,15 @@ public class Graph {
     private int n_roads;      // R
     private int n_hub_farms;  // H
 
-    private Set<Vertex> vertices;
+    private List<Node> vertices;
 
     public Graph(){
-        this.vertices = new HashSet<>();
+        this.vertices = new ArrayList<>();
     }
 
     public boolean updateToHubFarm(int label) {
-        Vertex v = new Vertex(label);
-        Vertex found = vertices.stream().filter(v::equals).findAny().orElse(null);
+        Node v = new Node(label);
+        Node found = vertices.stream().filter(v::equals).findAny().orElse(null);
         if (found != null) {
             found.setHubFarm(true);
             return true;
@@ -29,18 +29,17 @@ public class Graph {
         return false;
     }
 
-    public boolean addVertex(Vertex v) {
-        return vertices.add(v);
+    public boolean addVertex(Node v) {
+        if (vertices.stream().filter(v::equals).findAny().orElse(null) == null)
+            return vertices.add(v);
+        return false;
     }
 
-    public void addEdge(Vertex v, Edge e) {
-        Vertex found = vertices.stream().filter(v::equals).findAny().orElse(null);
+    // add one-way edge :: from v->
+    public void addEdge(Node v, Edge e) {
+        Node found = vertices.stream().filter(v::equals).findAny().orElse(null);
         if (found != null)
             found.addEdge(e);
-    }
-
-    public List<Vertex> getListOfVertices() {
-        return new ArrayList(vertices);
     }
 
 }

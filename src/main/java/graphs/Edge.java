@@ -9,12 +9,12 @@ import java.util.Objects;
 @Setter
 public class Edge {
 
-    private Vertex destination;
+    private Node destination;
     private int weight;
+    private boolean isIncluded = false;
 
-    public Edge(Vertex to, int weight) {
-        super();
-        this.destination = to;
+    public Edge(Node destination, int weight) {
+        this.destination = destination;
         this.weight = weight;
     }
 
@@ -24,7 +24,7 @@ public class Edge {
         if (o == null || getClass() != o.getClass()) return false;
         Edge edge = (Edge) o;
         return weight == edge.weight &&
-                Objects.equals(destination, edge.destination);
+                destination.equals(edge.destination);
     }
 
     @Override

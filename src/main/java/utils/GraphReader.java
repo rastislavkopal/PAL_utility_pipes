@@ -1,8 +1,8 @@
-package utilities;
+package utils;
 
 import graphs.Edge;
 import graphs.Graph;
-import graphs.Vertex;
+import graphs.Node;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,10 +54,16 @@ public class GraphReader {
 
                 // All-edges --> first two are farm labels, third is length of the road
                 if (!isFirst && !foundHubNumber) {
-                    Vertex source = new Vertex(Integer.parseInt(words[0]));
-                    g.addVertex(source);
-                    Edge e = new Edge(new Vertex(Integer.parseInt(words[1])), Integer.parseInt(words[2]));
-                    g.addEdge(source, e);
+                    Node v1 = new Node(Integer.parseInt(words[0]));
+                    Node v2 = new Node(Integer.parseInt(words[1]));
+
+                    g.addVertex(v1);
+                    g.addVertex(v2);
+                    Edge e1 = new Edge(v2, Integer.parseInt(words[2]));
+                    g.addEdge(v1, e1);
+
+                    Edge e2 = new Edge(v1, Integer.parseInt(words[2]));
+                    g.addEdge(v2, e2);
                 }
 
                 // List-of-HubFarms
