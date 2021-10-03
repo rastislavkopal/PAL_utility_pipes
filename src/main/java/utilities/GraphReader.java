@@ -1,9 +1,14 @@
 package utilities;
 
+import graphs.Edge;
 import graphs.Graph;
+import graphs.Vertex;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 @Getter
 @Setter
@@ -24,7 +29,48 @@ public class GraphReader {
      */
     public Graph readGraphFromFile(String filepath) {
 
-        return null;
+        Graph g = new Graph();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            boolean isFirst = true, foundHubNumber = false;
+
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split(" ");
+
+                // first-line: save N_farms and N_roads
+                if (isFirst) {
+                    g.setN_farms(Integer.parseInt(words[0]));
+                    g.setN_roads(Integer.parseInt(words[1]));
+                    isFirst = false;
+                    continue;
+                }
+
+                // Number-of-HubFarms
+                if (words.length == 1) {
+                    foundHubNumber = true;
+                    g.setN_hub_farms(Integer.parseInt(words[0]));
+                }
+
+                // All-edges --> first two are farm labels, third is length of the road
+                if (!isFirst && !foundHubNumber) {
+                    Vertex source = new Vertex(Integer.parseInt(words[0]));
+                    g.addVertex(source);
+                    Edge e = new Edge(new Vertex(Integer.parseInt(words[1])), Integer.parseInt(words[2]));
+                    g.addEdge(source, e);
+                }
+
+                // List-of-HubFarms
+                if (foundHubNumber) {
+                    for (String w : words) {
+                        g.updateToHubFarm(Integer.parseInt(w));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return g;
     }
 
 }

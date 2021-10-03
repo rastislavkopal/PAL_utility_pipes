@@ -3,9 +3,7 @@ package graphs;
 
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 @Data
 public class Graph {
@@ -17,11 +15,21 @@ public class Graph {
     private Set<Vertex> vertices;
 
     public Graph(){
-        this.vertices = new TreeSet<>();
+        this.vertices = new HashSet<>();
     }
 
+    public boolean updateToHubFarm(int label) {
+        Vertex v = new Vertex(label);
+        Vertex found = vertices.stream().filter(v::equals).findAny().orElse(null);
+        if (found != null) {
+            found.setHubFarm(true);
+            return true;
+        }
 
-    public boolean addNewVertex(Vertex v) {
+        return false;
+    }
+
+    public boolean addVertex(Vertex v) {
         return vertices.add(v);
     }
 
@@ -29,6 +37,10 @@ public class Graph {
         Vertex found = vertices.stream().filter(v::equals).findAny().orElse(null);
         if (found != null)
             found.addEdge(e);
+    }
+
+    public List<Vertex> getListOfVertices() {
+        return new ArrayList(vertices);
     }
 
 }
