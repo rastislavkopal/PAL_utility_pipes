@@ -1,36 +1,35 @@
 package graphs;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Node {
 
-    private int label;
-    private List<Edge> edges; // list of adjacent vertices/neighbours
+    // map lal neighoburs with the distance
+    private Map<Node, Integer> adjacentNodes;
     private boolean isHubFarm = false;
+    private Integer label;
+
+    // for djikstra
+    private List<Node> shortestPath;
+    private Integer distance = Integer.MAX_VALUE;
+
+    // for mst
     private boolean isVisited = false;
 
-    public Node(int label, List<Edge> edges) {
+    public Node(Integer label) {
         this.label = label;
-        this.edges = edges;
+        this.adjacentNodes = new HashMap<>();
+        this.shortestPath = new LinkedList<>();
     }
 
-    public Node(int label) {
-        this.label = label;
-        edges = new ArrayList<>();
-    }
-
-    public boolean addEdge(Edge e) {
-        return this.edges.add(e);
+    public void addNeighbour(Node n, int distance) {
+//        if ()
+        adjacentNodes.put(n, distance);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return label == node.label;
+        return label.equals(node.label);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package utils;
 
-import graphs.Edge;
 import graphs.Graph;
 import graphs.Node;
 import lombok.Getter;
@@ -9,6 +8,9 @@ import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +32,7 @@ public class GraphReader {
     public Graph readGraphFromFile(String filepath) {
 
         Graph g = new Graph();
+        List<Node> allNodes = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
@@ -56,26 +59,40 @@ public class GraphReader {
                 if (!isFirst && !foundHubNumber) {
                     Node v1 = new Node(Integer.parseInt(words[0]));
                     Node v2 = new Node(Integer.parseInt(words[1]));
+                    int len = Integer.parseInt(words[2]);
+                    v1.addNeighbour(v2, len);
+                    v2.addNeighbour(v1, len);
 
-                    g.addVertex(v1);
-                    g.addVertex(v2);
-                    Edge e1 = new Edge(v2, Integer.parseInt(words[2]));
-                    g.addEdge(v1, e1);
+                    // if node with label l does not exist yet, ..
+                    Node v1old = allNodes.stream().filter(n -> n.getLabel() == v1.getLabel()).findAny().orElse(null);
+                    Node v2old = allNodes.stream().filter(n -> n.getLabel() == v2.getLabel()).findAny().orElse(null);
+                    if (v1old == null) {
+                        allNodes.add(v1);
+                    } else { // node alredy exists -> add neighbour
+                        v1old.addNeighbour(v2, len);
+                    }
 
-                    Edge e2 = new Edge(v1, Integer.parseInt(words[2]));
-                    g.addEdge(v2, e2);
+                    if (v2old == null) {
+                        allNodes.add(v2);
+                    } else { // node alredy exists -> add neighbour
+                        v2old.addNeighbour(v1, len);
+                    }
+
+//                    g.addNode(v1, len);
+//                    g.addNode(v2, len);
                 }
 
                 // List-of-HubFarms
                 if (foundHubNumber) {
                     for (String w : words) {
-                        g.updateToHubFarm(Integer.parseInt(w));
+                        g.updateNodeToHubfarm(Integer.parseInt(w));
                     }
                 }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        g.setNodes(new HashSet<>(allNodes));
         return g;
     }
 

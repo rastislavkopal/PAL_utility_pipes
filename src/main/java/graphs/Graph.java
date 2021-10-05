@@ -1,45 +1,49 @@
 package graphs;
 
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.*;
-
-@Data
+@Getter
+@Setter
 public class Graph {
 
     private int n_farms;      // F .. labeled with names 0,1, ... ,F-1
     private int n_roads;      // R
     private int n_hub_farms;  // H
 
-    private List<Node> vertices;
+    private Set<Node> nodes;
 
-    public Graph(){
-        this.vertices = new ArrayList<>();
+    public Graph(Set<Node> nodes) {
+        this.nodes = nodes;
     }
 
-    public boolean updateToHubFarm(int label) {
-        Node v = new Node(label);
-        Node found = vertices.stream().filter(v::equals).findAny().orElse(null);
-        if (found != null) {
-            found.setHubFarm(true);
+    public Graph(){
+        this.nodes = new HashSet<>();
+    }
+
+    public boolean addNode(Node n, int distance) {
+        // graph already contains the node, so add his neighbours only
+        if (nodes.contains(n)) {
+            Node hub = nodes.stream().filter(i -> i.equals(n)).findAny().orElse(null);
+            if (hub != null)
+                hub.addNeighbour(n, distance);
             return true;
+        }
+        return this.nodes.add(n);
+    }
+
+    public boolean updateNodeToHubfarm(int nodeLabel) {
+        if (nodes.contains(new Node(nodeLabel))){
+            Node hub = nodes.stream().filter(n -> n.getLabel().intValue() == nodeLabel).findAny().orElse(null);
+            if (hub != null) {
+                hub.setHubFarm(true);
+                return true;
+            }
         }
 
         return false;
     }
-
-    public boolean addVertex(Node v) {
-        if (vertices.stream().filter(v::equals).findAny().orElse(null) == null)
-            return vertices.add(v);
-        return false;
-    }
-
-    // add one-way edge :: from v->
-    public void addEdge(Node v, Edge e) {
-        Node found = vertices.stream().filter(v::equals).findAny().orElse(null);
-        if (found != null)
-            found.addEdge(e);
-    }
-
 }
