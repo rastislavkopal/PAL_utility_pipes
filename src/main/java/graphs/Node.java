@@ -19,6 +19,7 @@ public class Node {
     private Integer distance = Integer.MAX_VALUE;
     // store hub-label with distance for each node
     private Map<Integer, Integer> hubDistances = new HashMap<>();
+    private List<Node> pathToShortestHub;
 
     // for mst
     private boolean isVisited = false;
@@ -27,6 +28,7 @@ public class Node {
         this.label = label;
         this.adjacentNodes = new HashMap<>();
         this.shortestPath = new LinkedList<>();
+        this.pathToShortestHub = new LinkedList<>();
     }
 
     public void addNeighbour(Node n, int distance) {

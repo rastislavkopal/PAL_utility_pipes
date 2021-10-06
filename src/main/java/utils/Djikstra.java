@@ -30,7 +30,7 @@ public class Djikstra {
         unsettledNodes.add(source);
 
         while (unsettledNodes.size() != 0) {
-            Node currentNode = getLowestDistanceNode(unsettledNodes);
+            Node currentNode = unsettledNodes.stream().min(Comparator.comparing(Node::getDistance)).orElse(null);
             unsettledNodes.remove(currentNode);
             for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
                 Node adjacentNode = adjacencyPair.getKey();
@@ -43,19 +43,6 @@ public class Djikstra {
             settledNodes.add(currentNode);
         }
         return graph;
-    }
-
-    private static Node getLowestDistanceNode(Set < Node > unsettledNodes) {
-        Node lowestDistanceNode = null;
-        int lowestDistance = Integer.MAX_VALUE;
-        for (Node node: unsettledNodes) {
-            int nodeDistance = node.getDistance();
-            if (nodeDistance < lowestDistance) {
-                lowestDistance = nodeDistance;
-                lowestDistanceNode = node;
-            }
-        }
-        return lowestDistanceNode;
     }
 
     private static void calculateMinimumDistance(Node evaluationNode, Integer edgeWeigh, Node sourceNode) {
