@@ -21,10 +21,19 @@ public class main {
             }
             System.out.println("");
         }
+
+        Node source = g.getNodes().stream().filter(n -> n.getLabel() == 15).findAny().orElse(null);
+        g = new Djikstra().calculateShortestPathFromSource(g, source);
+
+        // iterate each node and for hub farms run djikstra
+//        for (Node n : g.getNodes()) {
+//            if (n.isHubFarm()) {
+//                g = new Djikstra(g).calculateShortestPathFromSource(n, n.getLabel());
+//                break;
+//            }
+//        }
         System.out.println("...");
 
-        Node source = g.getNodes().stream().filter(n -> n.getLabel() == 2).findAny().orElse(null);
-        Graph d = new Djikstra(g).calculateShortestPathFromSource(source);
 //        List<Node> mst = new Prim(g.getVertices()).run();
 //
 //        // print minimum spanning tree

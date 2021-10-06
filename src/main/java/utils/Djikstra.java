@@ -5,22 +5,23 @@ import graphs.Node;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
 public class Djikstra {
 
-    private Graph graph;
+    private Graph g;
+    private Node djikstraSource;
 
     public Djikstra(Graph graph){
-        this.graph = graph;
+        this.g = graph;
     }
 
-    public Graph calculateShortestPathFromSource(Node source) {
+    public Djikstra() {
+    }
+
+    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
         source.setDistance(0);
 
         Set<Node> settledNodes = new HashSet<>();
@@ -31,8 +32,7 @@ public class Djikstra {
         while (unsettledNodes.size() != 0) {
             Node currentNode = getLowestDistanceNode(unsettledNodes);
             unsettledNodes.remove(currentNode);
-            for (Map.Entry<Node,Integer> adjacencyPair:
-                    currentNode.getAdjacentNodes().entrySet()) {
+            for (Map.Entry<Node, Integer> adjacencyPair : currentNode.getAdjacentNodes().entrySet()) {
                 Node adjacentNode = adjacencyPair.getKey();
                 Integer edgeWeight = adjacencyPair.getValue();
                 if (!settledNodes.contains(adjacentNode)) {
@@ -45,7 +45,7 @@ public class Djikstra {
         return graph;
     }
 
-    private static Node getLowestDistanceNode(Set<Node> unsettledNodes) {
+    private static Node getLowestDistanceNode(Set < Node > unsettledNodes) {
         Node lowestDistanceNode = null;
         int lowestDistance = Integer.MAX_VALUE;
         for (Node node: unsettledNodes) {

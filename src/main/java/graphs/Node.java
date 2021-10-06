@@ -17,6 +17,8 @@ public class Node {
     // for djikstra
     private List<Node> shortestPath;
     private Integer distance = Integer.MAX_VALUE;
+    // store hub-label with distance for each node
+    private Map<Integer, Integer> hubDistances = new HashMap<>();
 
     // for mst
     private boolean isVisited = false;
