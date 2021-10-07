@@ -11,17 +11,15 @@ import java.util.*;
 @Getter
 public class Djikstra {
 
-    private Graph g;
-    private Node djikstraSource;
+    private Graph graph;
+    private Node mainSource;
 
     public Djikstra(Graph graph){
-        this.g = graph;
+        this.graph = graph;
     }
 
-    public Djikstra() {
-    }
-
-    public static Graph calculateShortestPathFromSource(Graph graph, Node source) {
+    public Graph calculateShortestPathFromSource(Node source) {
+        mainSource = source;
         source.setDistance(0);
 
         Set<Node> settledNodes = new HashSet<>();
@@ -42,13 +40,14 @@ public class Djikstra {
             }
             settledNodes.add(currentNode);
         }
-        return graph;
+        return this.graph;
     }
 
-    private static void calculateMinimumDistance(Node evaluationNode, Integer edgeWeigh, Node sourceNode) {
+    private void calculateMinimumDistance(Node evaluationNode, Integer edgeWeight, Node sourceNode) {
         Integer sourceDistance = sourceNode.getDistance();
-        if (sourceDistance + edgeWeigh < evaluationNode.getDistance()) {
-            evaluationNode.setDistance(sourceDistance + edgeWeigh);
+        if (sourceDistance + edgeWeight < evaluationNode.getDistance()) {
+            evaluationNode.setDistance(sourceDistance + edgeWeight);
+            evaluationNode.getHubDistances().put(mainSource.getLabel(), sourceDistance + edgeWeight); // add per hub
             LinkedList<Node> shortestPath = new LinkedList<>(sourceNode.getShortestPath());
             shortestPath.add(sourceNode);
             evaluationNode.setShortestPath(shortestPath);

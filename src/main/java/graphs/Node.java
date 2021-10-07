@@ -36,6 +36,20 @@ public class Node {
         adjacentNodes.put(n, distance);
     }
 
+
+    // returns pair of closest hub with its distance as value
+    public Integer getClosestHub()
+    {
+        if (this.isHubFarm) {
+            return this.getLabel();
+        }
+        return Collections.min( this.getHubDistances().entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+
+    public int getAllAdjacentLen() {
+        return this.getAdjacentNodes().values().stream().mapToInt(Integer::intValue).sum();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
