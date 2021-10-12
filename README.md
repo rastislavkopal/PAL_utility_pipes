@@ -8,3 +8,9 @@
  
  An obvious demand of the management and the farmers is to lay pipes in optimal way, that is, to minimize their total length.
 
+
+
+
+![alt text](./description_graph.png)
+
+Image 1. A scheme of farms and roads in the area. Small circles represent farms, lines represent roads. Hub farms are drawn in black, numbers at the roads represent their length. Roads with pipes are highlighted in blue. The choice of roads with pipes is optimal, the total length of pipes is 42. There are 4 undecided farms, with background highlighted in light blue. The scheme illustrates Example 1 below.
